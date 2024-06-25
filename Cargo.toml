@@ -1,0 +1,8 @@
+[package]
+name = "kalosm_llama_poc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+kalosm-llama = "0.2.2"
+tokio = "1.38.0"
