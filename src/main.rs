@@ -9,7 +9,6 @@ fn read_user_input() -> String {
     input
 }
 
-
 fn read_prompt_from_file(path: &str) -> String {
     let mut file = std::fs::File::open(path).expect(format!("{}{}", "Failed to open file: ", path).as_str());
     let mut contents = String::new();
@@ -17,18 +16,23 @@ fn read_prompt_from_file(path: &str) -> String {
     contents
 }
 
-
 #[tokio::main]
 async fn main() {
     let model = Llama::default();
     let seed = read_prompt_from_file("seed.txt");
-    println!("Enter a prompt: ");
-    let prompt = read_user_input();
-
-    let mut result = model.stream_text(&format!("{}\n\n{}", seed, prompt)).await.expect("Failed to stream text");
-    println!();
-
-    while let Some(token) = result.next().await {
-        print!("{token}");
+    let mut last_generated = String::from("ROBOT:\n...\n");
+    loop {
+        println!("\n\nEnter a prompt: ");
+        let user_prompt = format!("{}\n{}\nUSER:\n{}\nROBOT:\n", seed, last_generated, read_user_input());
+        println!("\n\n<DEBUG(prompt)>\n{}</DEBUG>\n\n", user_prompt);
+        let mut result = model.stream_text(&user_prompt).await.expect("Failed to stream text");
+        println!();
+        last_generated = String::from("ROBOT:\n");
+        while let Some(token) = result.next().await {
+            print!("{token}");
+            last_generated.push_str(&format!("{token}"));
+        }
+        last_generated.push_str("\n");
+        // let prompt = read_user_input();
     }
 }
