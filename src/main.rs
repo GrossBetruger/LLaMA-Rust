@@ -1,6 +1,28 @@
 use std::io::Read;
+
+use clap::Parser;
 use kalosm_llama::prelude::*;
 use tokio;
+
+const _END_OF_TURN_TOKEN: &str = &"ROBOT:";
+const _TEST_PROMPT: &str = &"A vulnerability was found in Schneider Electric APC Easy UPS Online up to 2 --- A vulnerability, which was classified as critical, was found in Apple Safari up to 15 --- A vulnerability classified as critical was found in D-Link DIR-895 FW102b07 (Router Operating System) --- A vulnerability, which was classified as critical, was found in Microsoft Edge 99 --- A vulnerability classified as problematic was found in Huawei HarmonyOS and EMUI (affected version not known)";
+
+#[derive(
+    clap::ValueEnum, Clone, Default, Debug,
+)]
+enum ChatMode {
+    #[default]
+    General, // General chat bot mode
+    TaskSpecific, // Task specific QUESTION: / ANSWER: chat mode (requires prompt with examples)
+}
+
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// chat bot mode
+    #[arg(short, long)]
+    mode: ChatMode,
+}
 
 
 fn read_user_input() -> String {
@@ -16,10 +38,7 @@ fn read_prompt_from_file(path: &str) -> String {
     contents
 }
 
-#[tokio::main]
-async fn main() {
-    let model = Llama::new_chat();
-    let seed = read_prompt_from_file("seed.txt");
+async fn chat_main(model: Llama, seed: String) {
     let mut last_generated = String::from("ROBOT:\n...\n");
     loop {
         println!("\n\nEnter a prompt: ");
@@ -33,5 +52,42 @@ async fn main() {
             last_generated.push_str(&format!("{token}"));
         }
         last_generated.push_str("\n");
+    }
+}
+
+async fn task_specific_chat(model: Llama, seed: String) {
+    let mut last_generated_history = Vec::new();
+     loop {
+        println!("\n\nEnter a prompt: ");
+        let user_input = read_user_input();
+        let prompt = format!("{}\nQUESTION:\n\n{}\nANSWER:\n\n", seed, user_input);
+         // println!("\n\n<DEBUG(prompt)>\n{}</DEBUG>\n\n", prompt);
+        let mut result = model.stream_text(&prompt).await.expect("Failed to stream text");
+        println!();
+        let mut last_generated = String::from("ROBOT:\n");
+        while let Some(token) = result.next().await {
+            print!("{token}");
+            last_generated.push_str(&format!("{token}"));
+        }
+        last_generated.push_str("\n");
+        last_generated_history.push(last_generated);
+    }
+}
+
+#[tokio::main]
+async fn main() {
+    let args = Args::parse();
+
+    match args.mode {
+        ChatMode::General => {
+            let model = Llama::new_chat();
+            let seed = read_prompt_from_file("seed.txt");
+            chat_main(model, seed).await;
+        }
+        ChatMode::TaskSpecific => {
+            let model = Llama::new_chat();
+            let seed = read_prompt_from_file("prompt_learn_from_example.txt");
+            task_specific_chat(model, seed).await;
+        }
     }
 }

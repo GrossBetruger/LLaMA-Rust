@@ -1,0 +1,62 @@
+EXAMPLE_QUESTION: 
+
+provide the software vendor for the following vulnerabilities: """'A vulnerability was found in D-Link DIR-859 (Router Operating System) and classified as problematic --- A vulnerability, which was classified as critical, has been found in GitLab Community Edition and Enterprise Edition up to 12 --- A vulnerability classified as critical was found in GitLab Enterprise Edition 12 --- A vulnerability classified as critical has been found in GitLab Enterprise Edition 12 --- A vulnerability was found in GitLab Community Edition and Enterprise Edition up to 12 --- A vulnerability was found in GitLab Enterprise Edition up to 11 --- A vulnerability was found in GitLab Enterprise Edition up to 12 --- A vulnerability was found in GitLab Enterprise Edition up to 12 --- A vulnerability has been found in Google Chrome (Web Browser) and classified as critical --- A vulnerability, which was classified as critical, was found in Dell RSA Authentication Manager up to 8'"""
+
+EXAMPLE ANSWER:
+
+D-Link DIR-859 (Router Operating System)
+
+Vendor: D-Link
+GitLab Community Edition and Enterprise Edition (up to version 12)
+
+Vendor: GitLab Inc.
+GitLab Enterprise Edition (version 12)
+
+Vendor: GitLab Inc.
+GitLab Enterprise Edition (up to version 11)
+
+Vendor: GitLab Inc.
+Google Chrome (Web Browser)
+
+Vendor: Google LLC
+Dell RSA Authentication Manager (up to version 8)
+
+Vendor: Dell Technologies
+
+
+EXAMPLE QUESTION: 
+
+provide the software vendor for the following vulnerabilities: """'A vulnerability, which was classified as critical, was found in Mozilla Firefox up to 69 --- A vulnerability, which was classified as problematic, was found in Samsung Mobile Print on Android (Android App Software) --- A vulnerability classified as problematic has been found in Huawei Honor Magic 2 --- A vulnerability was found in Huawei CloudEngine 12800, S5700 and S6700 (Cloud Software) (unknown version) --- A vulnerability was found in Huawei Mate 20 up to 9 --- A vulnerability was found in Huawei Mate 20 Pro (Smartphone Operating System) --- A vulnerability was found in IBM Jazz Reporting Service 6 --- A vulnerability was found in Cisco IOS and IOS XE up to 16 --- A vulnerability classified as critical has been found in Google Chrome (Web Browser) --- A vulnerability has been found in IBM QRadar SIEM 7'"""
+
+EXAMPLE ANSWER:
+
+Mozilla Firefox up to version 69
+
+Vendor: Mozilla Corporation
+Samsung Mobile Print on Android (Android App Software)
+
+Vendor: Samsung Electronics
+Huawei Honor Magic 2
+
+Vendor: Huawei Technologies
+Huawei CloudEngine 12800, S5700, and S6700 (Cloud Software)
+
+Vendor: Huawei Technologies
+Huawei Mate 20 up to version 9
+
+Vendor: Huawei Technologies
+Huawei Mate 20 Pro (Smartphone Operating System)
+
+Vendor: Huawei Technologies
+IBM Jazz Reporting Service version 6
+
+Vendor: IBM Corporation
+Cisco IOS and IOS XE up to version 16
+
+Vendor: Cisco Systems
+Google Chrome (Web Browser)
+
+Vendor: Google LLC
+IBM QRadar SIEM version 7
+
+Vendor: IBM Corporation
