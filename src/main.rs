@@ -2,8 +2,8 @@ use std::io::Read;
 
 use clap::Parser;
 use kalosm_llama::prelude::*;
-use tokio;
 use regex::Regex;
+use tokio;
 
 const _END_OF_TURN_TOKEN: &str = &"ROBOT:";
 const _TEST_PROMPT: &str = &"A vulnerability was found in Schneider Electric APC Easy UPS Online up to 2 --- A vulnerability, which was classified as critical, was found in Apple Safari up to 15 --- A vulnerability classified as critical was found in D-Link DIR-895 FW102b07 (Router Operating System) --- A vulnerability, which was classified as critical, was found in Microsoft Edge 99 --- A vulnerability classified as problematic was found in Huawei HarmonyOS and EMUI (affected version not known)";
@@ -133,5 +133,12 @@ mod tests {
         let text = "ROBOT:\nwould you like an omelette?\n\n\n";
         let squashed_text = squash_linebreaks(text);
         assert_eq!(squashed_text, "ROBOT:\nwould you like an omelette?\n");
+    }
+
+    #[test]
+    fn test_read_prompt_from_file() {
+        let path = "test_seed.txt";
+        let prompt = read_prompt_from_file(path);
+        assert_eq!(prompt, "test seed\n");
     }
 }
