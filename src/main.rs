@@ -18,13 +18,13 @@ fn read_prompt_from_file(path: &str) -> String {
 
 #[tokio::main]
 async fn main() {
-    let model = Llama::default();
+    let model = Llama::new_chat();
     let seed = read_prompt_from_file("seed.txt");
     let mut last_generated = String::from("ROBOT:\n...\n");
     loop {
         println!("\n\nEnter a prompt: ");
         let user_prompt = format!("{}\n{}\nUSER:\n{}\nROBOT:\n", seed, last_generated, read_user_input());
-        println!("\n\n<DEBUG(prompt)>\n{}</DEBUG>\n\n", user_prompt);
+        // println!("\n\n<DEBUG(prompt)>\n{}</DEBUG>\n\n", user_prompt);
         let mut result = model.stream_text(&user_prompt).await.expect("Failed to stream text");
         println!();
         last_generated = String::from("ROBOT:\n");
@@ -33,6 +33,5 @@ async fn main() {
             last_generated.push_str(&format!("{token}"));
         }
         last_generated.push_str("\n");
-        // let prompt = read_user_input();
     }
 }
