@@ -7,6 +7,7 @@ use regex::Regex;
 
 const _END_OF_TURN_TOKEN: &str = &"ROBOT:";
 const _TEST_PROMPT: &str = &"A vulnerability was found in Schneider Electric APC Easy UPS Online up to 2 --- A vulnerability, which was classified as critical, was found in Apple Safari up to 15 --- A vulnerability classified as critical was found in D-Link DIR-895 FW102b07 (Router Operating System) --- A vulnerability, which was classified as critical, was found in Microsoft Edge 99 --- A vulnerability classified as problematic was found in Huawei HarmonyOS and EMUI (affected version not known)";
+const USER_IMPERSONATE_PATTERN: &str = r"(?s)USER:\n.+";
 
 #[derive(
     clap::ValueEnum, Clone, Default, Debug,
@@ -71,8 +72,7 @@ async fn chat_main(model: Llama, seed: String) {
             // print!("{token}");
             last_generated.push_str(&format!("{token}"));
         }
-        let user_impersonation_pattern = r"(?s)USER:\n.+";
-        last_generated = clean_garbage_text(&last_generated, vec![user_impersonation_pattern]);
+        last_generated = clean_garbage_text(&last_generated, vec![USER_IMPERSONATE_PATTERN]);
         last_generated.push_str("\n");
         last_generated = squash_linebreaks(&last_generated);
         println!("{}", last_generated);
@@ -113,5 +113,18 @@ async fn main() {
             let seed = read_prompt_from_file("prompt_learn_from_example.txt");
             task_specific_chat(model, seed).await;
         }
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_clean_garbage_text() {
+        let text = "USER:\n hello kind robot? \nROBOT:\n hello kind human!";
+        let cleaned_text = clean_garbage_text(text, vec![USER_IMPERSONATE_PATTERN]);
+        assert_eq!(cleaned_text, "");
     }
 }
