@@ -49,6 +49,10 @@ fn clean_garbage_text(text: &str, garbage_patterns: Vec<&str>) -> String {
     cleaned_text
 }
 
+fn squash_linebreaks(text: &str) -> String {
+    let re = Regex::new(r"\n{2,}").expect("Failed to create regex pattern");
+    re.replace_all(text, "\n").to_string()
+}
 
 const ROBOT_TURN_HEADER: &'static str = "ROBOT:\n";
 
@@ -67,9 +71,10 @@ async fn chat_main(model: Llama, seed: String) {
             // print!("{token}");
             last_generated.push_str(&format!("{token}"));
         }
-        let user_impersonation_pattern = "(?s)USER:\n.+";
+        let user_impersonation_pattern = r"(?s)USER:\n.+";
         last_generated = clean_garbage_text(&last_generated, vec![user_impersonation_pattern]);
         last_generated.push_str("\n");
+        last_generated = squash_linebreaks(&last_generated);
         println!("{}", last_generated);
     }
 }
