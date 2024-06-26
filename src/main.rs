@@ -127,4 +127,11 @@ mod tests {
         let cleaned_text = clean_garbage_text(text, vec![USER_IMPERSONATE_PATTERN]);
         assert_eq!(cleaned_text, "");
     }
+
+    #[test]
+    fn test_squash_linebreaks() {
+        let text = "ROBOT:\nwould you like an omelette?\n\n\n";
+        let squashed_text = squash_linebreaks(text);
+        assert_eq!(squashed_text, "ROBOT:\nwould you like an omelette?\n");
+    }
 }
