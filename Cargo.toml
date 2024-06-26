@@ -6,4 +6,5 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.5.7", features = ["derive"] }
 kalosm-llama = "0.2.2"
+regex = "1.10.5"
 tokio = "1.38.0"
